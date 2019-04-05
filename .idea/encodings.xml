@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/BuildTrafficLight.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/CarMooving.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/CarsMaker.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/Echad.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/MyActionListener.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/Ramzor.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/ShloshaAvot.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/ShneyLuchot.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/TrafficLightFrame.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/TrafficLightPanel.java" charset="ISO-8859-1" />
+  </component>
+</project>
