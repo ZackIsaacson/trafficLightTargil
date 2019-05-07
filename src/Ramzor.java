@@ -18,6 +18,7 @@ class Ramzor
 	int diameter;
 	Color colorLight[];
 
+	//echad
 	Ramzor(int num,int dia,int x0,int y0)
 	{
 		numOfLights=num;
@@ -29,6 +30,7 @@ class Ramzor
 		xP[0]=x0; yP[0]=y0;
 	}
 
+	//shney luchot
 	Ramzor(int num,int dia,int x0,int y0,int x1,int y1)
 	{
 		numOfLights=num;
@@ -42,6 +44,7 @@ class Ramzor
 		xP[1]=x1; yP[1]=y1;
 	}
 
+	//shlosha avot
 	Ramzor(int num,int dia,int x0,int y0,int x1,int y1,int x2,int y2)
 	{
 		numOfLights=num;
