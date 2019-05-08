@@ -74,9 +74,9 @@ class ShneyLuchot extends Thread {
 
                             case GREEN:
                                 while (true) {
-                                    if (evGreenShney.arrivedEvent()) {
-                                        evGreenShney.waitEvent();
-                                        redOn();
+                                    if (evRedShney.arrivedEvent()) {
+                                        evRedShney.waitEvent();
+                                        greenOn();
                                         inState = InState.GREEN;
                                         break;
                                     } else if (evShabbatShney.arrivedEvent()) {
@@ -161,6 +161,8 @@ class ShneyLuchot extends Thread {
     public void redOn() {
         setLight(1, Color.RED);
         setLight(2, Color.GRAY);
+        evRedShney.sendEvent();
+//        TODO make sure send event is right. that really goes back to controller. (if not create another event with controller holding other side and send back to controller that turned red)
     }
 
     public void shabbatOn() {

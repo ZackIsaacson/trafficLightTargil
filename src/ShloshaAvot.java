@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class ShloshaAvot extends Thread {
     Ramzor ramzor;
     JPanel panel;
-    private Event64 evYellowRedShlosha, evYellowShlosha, evWeekdayShlosha, evShabbatShlosha,evTurnedRedOn;
+    private Event64 evGreenShlosha, evRedShlosha, evWeekdayShlosha, evShabbatShlosha,evRedShlosha;
 
 
     enum OutState {WEEKDAY, SHABBAT}
@@ -32,15 +32,27 @@ public class ShloshaAvot extends Thread {
     private boolean history = false;
     private boolean stop = true;
 
-    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evYellowRedShlosha, Event64 evYellowShlosha,
-                       Event64 evWeekdayShlosha, Event64 evShabbatShlosha) {
+/*    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evGreenShlosha, Event64 evRedShlosha,
+                       Event64 evTurnedRedOn,Event64 evWeekdayShlosha, Event64 evShabbatShlosha) {
         this.ramzor = ramzor;
         this.panel = panel;
         new CarsMaker(panel, this, key);
-        this.evYellowRedShlosha = evYellowRedShlosha;
-        this.evYellowShlosha = evYellowShlosha;
+        this.evGreenShlosha = evGreenShlosha;
+        this.evRedShlosha = evRedShlosha;
         this.evWeekdayShlosha = evWeekdayShlosha;
         this.evShabbatShlosha = evShabbatShlosha;
+        this.evTurnedRedOn=evTurnedRedOn;
+        start();
+    }*/
+    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evRedShlosha, Event64 evGreenShlosha,Event64 evShabbatShlosha,Event64 evWeekdayShlosha,) {
+        this.ramzor = ramzor;
+        this.panel = panel;
+        new CarsMaker(panel, this, key);
+        this.evGreenShlosha = evGreenShlosha;
+        this.evRedShlosha = evRedShlosha;
+        this.evWeekdayShlosha = evWeekdayShlosha;
+        this.evShabbatShlosha = evShabbatShlosha;
+       
         start();
     }
 
@@ -61,8 +73,8 @@ public class ShloshaAvot extends Thread {
                             switch (InWeekdayState) {
                                 case RED:
                                     while (true) {
-                                        if (evYellowRedShlosha.arrivedEvent()) {
-                                            evYellowRedShlosha.waitEvent();
+                                        if (evGreenShlosha.arrivedEvent()) {
+                                            evGreenShlosha.waitEvent();
                                             yellowRedOn();
 //                                            InWeekdayState = InWeekdayState.YELLOW;
                                             InWeekdayState = InWeekdayState.GREEN;
@@ -79,8 +91,8 @@ public class ShloshaAvot extends Thread {
                                     break;
                             /*    case YELLOW:
                                     while (true) {
-                                        if (evYellowRedShlosha.arrivedEvent()) {
-                                            evYellowRedShlosha.waitEvent();
+                                        if (evGreenShlosha.arrivedEvent()) {
+                                            evGreenShlosha.waitEvent();
                                             yellowRedOn();
                                             InWeekdayState = InWeekdayState.GREEN;
                                             break;
@@ -95,8 +107,8 @@ public class ShloshaAvot extends Thread {
                                     break;*/
                                 case GREEN:
                                     while (true) {
-                                        if (evYellowShlosha.arrivedEvent()) {
-                                            evYellowShlosha.waitEvent();
+                                        if (evRedShlosha.arrivedEvent()) {
+                                            evRedShlosha.waitEvent();
                                             yellowOn();
                                             InWeekdayState = InWeekdayState.RED;
                                             break;
@@ -197,15 +209,12 @@ public class ShloshaAvot extends Thread {
         panel.repaint();
     }
 
-    public void yellowRedOn() {
-        try {
+    public void yellowRedOn()throws InterruptedException {
             setLight(1, Color.RED);
             setLight(2, Color.YELLOW);
             setLight(3, Color.LIGHT_GRAY);
             sleep(1000);
             greenOn();
-        } catch (InterruptedException e) {
-        }
 
     }
 
@@ -215,25 +224,26 @@ public class ShloshaAvot extends Thread {
         setLight(3, Color.GREEN);
     }
 
-    public void yellowOn() {
-        try {
+    public void yellowOn()throws InterruptedException{
+
             setLight(1, Color.LIGHT_GRAY);
             setLight(2, Color.YELLOW);
             setLight(3, Color.LIGHT_GRAY);
             sleep(1000);
             redOn();
-        } catch (InterruptedException e) {
-        }
+
     }
 
     public void redOn() {
         setLight(1, Color.RED);
         setLight(2, Color.LIGHT_GRAY);
         setLight(3, Color.LIGHT_GRAY);
+        evRedShlosha.sendEvent();//TODO check if right
+
     }
 
-    public void shabbatOn() {
-        try {
+    public void shabbatOn() throws InterruptedException{
+
             setLight(1, Color.LIGHT_GRAY);
             setLight(2, Color.YELLOW);
             setLight(3, Color.LIGHT_GRAY);
@@ -246,8 +256,7 @@ public class ShloshaAvot extends Thread {
                 sleep(1000);
                 setLight(2, Color.YELLOW);
             }
-        } catch (InterruptedException e) {
-        }
+
     }
 
     public boolean isStop() {

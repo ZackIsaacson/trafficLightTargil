@@ -18,7 +18,8 @@ import javax.swing.JRadioButton;
 public class BuildTrafficLight {
 
     public static void main(String[] args) {
-        final int numOfLights = 4 + 12 + 1;
+        Controller controller=Controller.getInstance();
+        /*final int numOfLights = 4 + 12 + 1;
         Ramzor ramzorim[] = new Ramzor[numOfLights];
         ramzorim[0] = new Ramzor(3, 40, 430, 110, 472, 110, 514, 110);
         ramzorim[1] = new Ramzor(3, 40, 450, 310, 450, 352, 450, 394);
@@ -38,32 +39,85 @@ public class BuildTrafficLight {
         ramzorim[14] = new Ramzor(2, 20, 200, 227, 200, 205);
         ramzorim[15] = new Ramzor(2, 20, 200, 18, 200, 40);
 
-        ramzorim[16] = new Ramzor(1, 30, 555, 645);
+        ramzorim[16] = new Ramzor(1, 30, 555, 645);*/
 
+       /* Event64[] evYellowRedShloshaArray=new Event64[4];
+        Event64[] evYellowShloshaArray=new Event64[4];
+        Event64[] evTurnedRedOnArray=new Event64[4];
+        Event64[] evWeekdayShloshaArray=new Event64[4];
+        Event64[] evShabbatShloshaArray=new Event64[4];
+        Event64[][] evArr=new Event64[16][5];
         TrafficLightFrame tlf = new TrafficLightFrame(" תשע''ב installation of traffic lights", ramzorim);
         for (int i = 0; i < 4; i++) {
-            Event64 evYellowRedShlosha, evYellowShlosha,
+            Event64 evYellowRedShlosha, evYellowShlosha, evTurnedRedOnShlosha,
                     evWeekdayShlosha, evShabbatShlosha;
+
             evYellowRedShlosha = new Event64();
             evYellowShlosha = new Event64();
             evWeekdayShlosha = new Event64();
             evShabbatShlosha = new Event64();
-            new ShloshaAvot(ramzorim[0], tlf.myPanel, 1,evYellowRedShlosha,evYellowShlosha, evWeekdayShlosha, evShabbatShlosha);
+            evTurnedRedOnShlosha=new Event64();
+evArr[0][0]=evYellowRedShlosha;
+evArr[0][1]=evYellowShlosha;
+            evYellowRedShloshaArray[i]=evYellowRedShlosha;
+            evYellowShloshaArray[i]=evYellowShlosha;
+            evTurnedRedOnArray[i]=evTurnedRedOnShlosha;
+            evWeekdayShloshaArray[i]=evWeekdayShlosha;
+            evShabbatShloshaArray[i]=evShabbatShlosha;
 
+            evArr[i]=new Event64[]{evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i]};
+//          evArr[i]={evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i]};
+            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1+i,evArr[i]);
+
+//            new ShloshaAvot(ramzorim[0], tlf.myPanel, 1,evYellowRedShlosha,evYellowShlosha,evTurnedRedOn, evWeekdayShlosha, evShabbatShlosha);
+//            new ShloshaAvot(ramzorim[1], tlf.myPanel, 2);   //was like this
+//            new ShloshaAvot(ramzorim[2], tlf.myPanel, 3);
+//            new ShloshaAvot(ramzorim[3], tlf.myPanel, 4);
         }
-            new ShloshaAvot(ramzorim[1], tlf.myPanel, 2);
-            new ShloshaAvot(ramzorim[2], tlf.myPanel, 3);
-            new ShloshaAvot(ramzorim[3], tlf.myPanel, 4);
+
+        Event64[] evYellowRedShloshaArray=new Event64[4];
+        Event64[] evYellowShloshaArray=new Event64[4];
+        Event64[] evTurnedRedOnArray=new Event64[4];
+        Event64[] evWeekdayShloshaArray=new Event64[4];
+        Event64[] evShabbatShloshaArray=new Event64[4];
+        Event64[][] evArr=new Event64[16][5];
+        TrafficLightFrame tlf = new TrafficLightFrame(" תשע''ב installation of traffic lights", ramzorim);
+        for (int i = 4; i < 16; i++) {
+            Event64 evGreenShney, evRedShney, evTurnedRedOnShney,
+                    evWeekdayShney, evShabbatShney;
+
+            evYellowRedShlosha = new Event64();
+            evYellowShlosha = new Event64();
+            evWeekdayShlosha = new Event64();
+            evShabbatShlosha = new Event64();
+            evTurnedRedOnShney=new Event64();
+
+            evYellowRedShloshaArray[i]=evYellowRedShlosha;
+            evYellowShloshaArray[i]=evYellowShlosha;
+            evTurnedRedOnArray[i]=evTurnedRedOn;
+            evWeekdayShloshaArray[i]=evWeekdayShlosha;
+            evShabbatShloshaArray[i]=evShabbatShlosha;
+
+            evArr[i]=new Event64[]{evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i]};
+//            evArr[i]={evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i],evYellowRedShloshaArray[i]};
+            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1+i,evArr[i]);
+
+//            new ShloshaAvot(ramzorim[0], tlf.myPanel, 1,evYellowRedShlosha,evYellowShlosha,evTurnedRedOn, evWeekdayShlosha, evShabbatShlosha);
+//            new ShloshaAvot(ramzorim[1], tlf.myPanel, 2);   //was like this
+//            new ShloshaAvot(ramzorim[2], tlf.myPanel, 3);
+//            new ShloshaAvot(ramzorim[3], tlf.myPanel, 4);
+        }
+
 
 
         new ShneyLuchot(ramzorim[4], tlf.myPanel);
         new ShneyLuchot(ramzorim[5], tlf.myPanel);
         new ShneyLuchot(ramzorim[9], tlf.myPanel);
-        new ShneyLuchot(ramzorim[10], tlf.myPanel);
+        new ShneyLuchot(ramzorim[10], tlf.myPanel);*/
 
-        new Echad(ramzorim[16], tlf.myPanel);
+//        new Echad(ramzorim[16], tlf.myPanel);
 
-        MyActionListener myListener = new MyActionListener();
+       /* MyActionListener myListener = new MyActionListener();
 
         JRadioButton butt[] = new JRadioButton[13];
 
@@ -93,6 +147,6 @@ public class BuildTrafficLight {
         butt[12].setText("Shabbos");
         butt[12].setOpaque(false);
         butt[12].addActionListener(myListener);
-        tlf.myPanel.add(butt[12]);
+        tlf.myPanel.add(butt[12]);*/
     }
 }
