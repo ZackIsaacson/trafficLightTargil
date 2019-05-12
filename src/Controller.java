@@ -6,13 +6,14 @@ public class Controller extends Thread {
 
 
     private Event64[] evRedOn = new Event64[16];
+
     private Event64[] evGreenOn = new Event64[16];
     private Event64[] evShabbatOn = new Event64[16];
     private Event64[] evWeekdayOn = new Event64[16];
 
     //TODO events dealing with listener
-    private Event64 evShabbatOnButton = new Event64();  //16 if not selected and pressed
-    private Event64 evShabbatOffButton = new Event64(); //16 if selected and pressed
+    private Event64 evShabbatOnButton;// = new Event64();  //16 if not selected and pressed
+    private Event64 evShabbatOffButton;// = new Event64(); //16 if selected and pressed
     private Event64[] evButton = new Event64[12];  //4-15
 
 
@@ -36,6 +37,7 @@ public class Controller extends Thread {
 
     private boolean history = false;
     private boolean stop = true;
+    DanTimer75 timer;
 
     /*    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evYellowRedShlosha, Event64 evYellowShlosha,
                            Event64 evTurnedRedOn,Event64 evWeekdayShlosha, Event64 evShabbatOnButton) {
@@ -56,9 +58,32 @@ public class Controller extends Thread {
     }
 
     private Controller() {
+        createEvents(); //todo need?
         createRamzorim();
         createButtons();
         start();
+    }
+
+    private void createEvents() {
+       /* private Event64[] evGreenOn = new Event64[16];
+        private Event64[] evShabbatOn = new Event64[16];
+        private Event64[] evWeekdayOn = new Event64[16];
+
+        //TODO events dealing with listener
+        private Event64 evShabbatOnButton = new Event64();  //16 if not selected and pressed
+        private Event64 evShabbatOffButton = new Event64(); //16 if selected and pressed
+        private Event64[] evButton = new Event64[12];  /*/
+        for (int i = 0; i < 16; i++) {
+            evRedOn[i] = new Event64();
+            evGreenOn[i] = new Event64();
+            evShabbatOn[i] = new Event64();
+            evWeekdayOn[i] = new Event64();
+        }
+        for (int i = 0; i < 12; i++) {
+            evButton[i] = new Event64();
+        }
+        evShabbatOnButton = new Event64();  //16 if not selected and pressed
+        evShabbatOffButton = new Event64(); //16 if selected and pressed
     }
 
     boolean fromReset;
@@ -99,14 +124,14 @@ public class Controller extends Thread {
                                     break;
                                 case LIGHT0:
                                     while (true) {
-                                        /*TODO MAKE TIMER*/
+                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
                                         if (crossWalkButtonPressed(new int[]{4, 5, 8, 11, 14, 15})) {
                                             turn32Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT32;
 
                                             break;
-                                        } else if (/*TODO CHECK IF TIMER OVER*/) {
+                                        } else if (!timer.isAlive()) {  /*TODO CHECK IF TIMER OVER*/
                                             turn32Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT32;
@@ -139,6 +164,7 @@ public class Controller extends Thread {
                                     break;*/
                                 case LIGHT32:
                                     while (true) {
+                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
                                         if (crossWalkButtonPressed(new int[]{9, 10})) {
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
@@ -151,7 +177,7 @@ public class Controller extends Thread {
                                             InWeekdayState = InWeekdayState.LIGHT12;
 
                                             break;
-                                        } else if (/*TODO CHECK IF TIMER OVER*/) {
+                                        } else if (!timer.isAlive()) {
                                             turn12Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT12;
@@ -168,6 +194,8 @@ public class Controller extends Thread {
                                     break;
                                 case LIGHT12:
                                     while (true) {
+                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
+
                                         /*TODO MAKE TIMER*/
                                         if (crossWalkButtonPressed(new int[]{9, 10, 8, 11, 14, 15})) {
                                             turn0Green();
@@ -175,7 +203,7 @@ public class Controller extends Thread {
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
-                                        } else if (/*TODO CHECK IF TIMER OVER*/) {
+                                        } else if (!timer.isAlive()) {
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;

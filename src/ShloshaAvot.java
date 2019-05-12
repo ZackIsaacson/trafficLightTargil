@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 public class ShloshaAvot extends Thread {
     Ramzor ramzor;
     JPanel panel;
-    private Event64 evGreenShlosha, evRedShlosha, evWeekdayShlosha, evShabbatShlosha,evRedShlosha;
+    private Event64 evGreenShlosha, evRedShlosha, evWeekdayShlosha, evShabbatShlosha;
 
 
     enum OutState {WEEKDAY, SHABBAT}
@@ -44,7 +44,8 @@ public class ShloshaAvot extends Thread {
         this.evTurnedRedOn=evTurnedRedOn;
         start();
     }*/
-    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evRedShlosha, Event64 evGreenShlosha,Event64 evShabbatShlosha,Event64 evWeekdayShlosha,) {
+    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evRedShlosha,
+                       Event64 evGreenShlosha,Event64 evShabbatShlosha,Event64 evWeekdayShlosha) {
         this.ramzor = ramzor;
         this.panel = panel;
         new CarsMaker(panel, this, key);
@@ -64,7 +65,7 @@ public class ShloshaAvot extends Thread {
             boolean out = false;
             outState = OutState.WEEKDAY;
             InWeekdayState = InWeekdayState.RED;
-            redOn();
+//            redOn();
             int sum = 0;
             while (!finish) {
                 switch (outState) {

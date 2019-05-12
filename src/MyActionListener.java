@@ -2,6 +2,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JRadioButton;
 
+import static java.lang.Thread.sleep;
+
 /*
  * Created on Tevet 5770
  */
@@ -20,13 +22,19 @@ public class MyActionListener implements ActionListener {
 
         if (Integer.parseInt(butt.getName()) < 16) {
             butt.setSelected(true);
+            try {
+                sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
 //	        todo wait 1 second
             butt.setSelected(false);
         } else {
-            if (butt.isSelected()) {
-                selected = false;
-            } else
-                selected = true;
+            selected=!butt.isSelected();
+//            if (butt.isSelected()) { //was selected -> unselect
+//                selected = false;
+//            } else  //wasnt selected ->select.
+//                selected = true;
             butt.setSelected(selected);
         }
 
