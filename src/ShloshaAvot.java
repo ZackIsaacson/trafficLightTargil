@@ -209,11 +209,12 @@ public class ShloshaAvot extends Thread {
         setLight(1, Color.LIGHT_GRAY);
         setLight(2, Color.LIGHT_GRAY);
         setLight(3, Color.GREEN);
+        stop = false;
         evAck.sendEvent();  //so that controller can start timer.
     }
 
     public void yellowOn() throws InterruptedException {
-
+        stop = true;
         setLight(1, Color.LIGHT_GRAY);
         setLight(2, Color.YELLOW);
         setLight(3, Color.LIGHT_GRAY);
@@ -223,6 +224,8 @@ public class ShloshaAvot extends Thread {
     }
 
     public void redOn() {
+        stop = true;
+
         setLight(1, Color.RED);
         setLight(2, Color.LIGHT_GRAY);
         setLight(3, Color.LIGHT_GRAY);
@@ -231,8 +234,17 @@ public class ShloshaAvot extends Thread {
     }
 
     public void shabbatOn() throws InterruptedException {
-
+        stop = false;
         setLight(1, Color.LIGHT_GRAY);
+        setLight(3, Color.LIGHT_GRAY);
+        while (!evRecieved.arrivedEvent()) {
+            setLight(2, Color.GRAY);
+            sleep(1000);
+            setLight(2, Color.YELLOW);
+            sleep(1000);
+        }
+        evRecieved.waitEvent();
+       /*     setLight(1, Color.LIGHT_GRAY);
         setLight(2, Color.YELLOW);
         setLight(3, Color.LIGHT_GRAY);
         while (evRecieved.waitEvent() != EventEnum.WEEKDAY)
@@ -243,7 +255,7 @@ public class ShloshaAvot extends Thread {
             setLight(2, Color.GRAY);
             sleep(1000);
             setLight(2, Color.YELLOW);
-        }
+        }*/
 
     }
 

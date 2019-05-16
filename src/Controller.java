@@ -4,6 +4,7 @@
 import javax.swing.*;
 import javax.swing.JRadioButton;
 import java.awt.*;
+import java.util.HashSet;
 
 public class Controller extends Thread {
 
@@ -111,7 +112,7 @@ public class Controller extends Thread {
             boolean finish = false;
             boolean out = false;
             outState = OutState.WEEKDAY;
-            fromReset = false;
+            fromReset = true;
             InWeekdayState = InWeekdayState.RESET;
             sendRedEventToAllRamzorim();
             int sum = 0;
@@ -123,13 +124,13 @@ public class Controller extends Thread {
                                 case RESET:
                                     while (true) {
                                         if (allRamzorimTurnedRed()) {
-                                            fromReset = true;
+                                            fromReset = false;
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
-                                        } else if (evButtonPressed.arrivedEvent()) {
+                                        }/* else if (evButtonPressed.arrivedEvent()) {
 
                                             if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
                                                 shabbatOn();
@@ -137,7 +138,7 @@ public class Controller extends Thread {
                                                 outState = OutState.SHABBAT;
                                                 break;
                                             }
-                                        } else
+                                        }*/ else
                                             yield();
 
                                     }
@@ -145,23 +146,38 @@ public class Controller extends Thread {
                                 case LIGHT0:
 //                                    if((evAck[0].waitEvent()==EventAckEnum.GREEN));
                                     evAck[0].waitEvent(); //todo check that only evAck from green can 
-                                    timer = new DanTimer75(3000);
+                                    timer = new DanTimer75(5000);
                                     while (true) {
 //TODO MAKE TIMER
-
-                                        if (crossWalkButtonPressed(new int[]{4, 5, 8, 11, 14, 15})) {
-                                            turnLightRed(new int[]{0});
-                                            turn32Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT32;
-
+                                   /*     if (buttonPressed(InWeekdayState.LIGHT0)) {
+                                        }*/
+                                        if (evButtonPressed.arrivedEvent()) {
+                                            int num = (int) evButtonPressed.waitEvent();
+                                            if (num == 16) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                            } else if (num == 4 || num == 5 || num == 8 || num == 11 ||
+                                                    num == 14 || num == 15) {
+                                                turnLightRed(new int[]{0});
+                                                turn32Green();
+                                                InWeekdayState = InWeekdayState.LIGHT32;
+                                            }
                                             break;
                                         } else if (!timer.isAlive()) {
-//TODO CHECK IF TIMER OVER
-
                                             turnLightRed(new int[]{0});
                                             turn32Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
+                                            InWeekdayState = InWeekdayState.LIGHT32;
+                                            break;
+                                        } else
+                                            yield();
+
+                                    }
+                                    break;
+
+                                     /*   if (crossWalkButtonPressed(new int[]{4, 5, 8, 11, 14, 15})) {
+                                            turnLightRed(new int[]{0});
+                                            turn32Green();
                                             InWeekdayState = InWeekdayState.LIGHT32;
 
                                             break;
@@ -171,21 +187,25 @@ public class Controller extends Thread {
                                                 out = true;
                                                 outState = OutState.SHABBAT;
                                                 break;
-                                            }
-                                        } else
-                                            yield();
+                                            }*/
+                                       /* } else if (!timer.isAlive()) {
+//TODO CHECK IF TIMER OVER
 
-                                    }
-                                    break;
+                                            turnLightRed(new int[]{0});
+                                            turn32Green();
+//                                            InWeekdayState = InWeekdayState.LIGHT32;
+                                            InWeekdayState = InWeekdayState.LIGHT32;
+
+                                            break;*/
 
 
                                 case LIGHT32:
                                     evAck[2].waitEvent();  //todo can it possibly be event from red??
                                     evAck[3].waitEvent();  //todo supposed to be evAckGreen
-                                    timer = new DanTimer75(3000);
+                                    timer = new DanTimer75(5000);
 //TODO MAKE TIMER
 
-                                    while (true) {
+                                   /* while (true) {
                                         if (crossWalkButtonPressed(new int[]{9, 10})) {
                                             turnLightRed(new int[]{2, 3});
                                             turn0Green();
@@ -194,14 +214,13 @@ public class Controller extends Thread {
 
                                             break;
                                         } else if (crossWalkButtonPressed(new int[]{6, 7, 12, 13})) {
-                                            turnLightRed(new int[]{2, 3});
+                                            turnLightRed(new int[]{3});
                                             turn12Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT12;
 
                                             break;
                                         } else if (!timer.isAlive()) {
-                                            turnLightRed(new int[]{2, 3});
+                                            turnLightRed(new int[]{3});
                                             turn12Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT12;
@@ -217,22 +236,56 @@ public class Controller extends Thread {
                                         } else
                                             yield();
 
+                                    }*/
+                                    while (true) {
+                                        if (evButtonPressed.arrivedEvent()) {
+                                            int num = (int) evButtonPressed.waitEvent();
+                                            if (num == 16) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                            } else if (num == 9 || num == 10) {
+                                                turnLightRed(new int[]{2, 3});
+                                                turn0Green();
+                                                InWeekdayState = InWeekdayState.LIGHT0;
+                                                break;
+                                            } else if (num == 6 || num == 7 || num == 12 || num == 13) {
+                                                turnLightRed(new int[]{3});
+                                                turn12Green();
+                                                InWeekdayState = InWeekdayState.LIGHT12;
+                                            }
+                                            break;
+                                        } else if (!timer.isAlive()) {
+                                            turnLightRed(new int[]{3});
+                                            turn12Green();
+                                            InWeekdayState = InWeekdayState.LIGHT12;
+                                            break;
+                                        } else
+                                            yield();
                                     }
                                     break;
                                 case LIGHT12:
                                     evAck[1].waitEvent();
-                                    evAck[2].waitEvent();
-                                    timer = new DanTimer75(3000);
+//                                    evAck[2].waitEvent();
+                                    timer = new DanTimer75(5000);
 //TODO MAKE TIMER
-
+/*
                                     while (true) {
 //TODO MAKE TIMER
-                                        if (crossWalkButtonPressed(new int[]{9, 10, 8, 11, 14, 15})) {
+                                        if (crossWalkButtonPressed(new int[]{9, 10, 14, 15})) { // 8, 11,
                                             turnLightRed(new int[]{1, 2});
 
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;
+
+                                            break;
+                                        } else if (crossWalkButtonPressed(new int[]{8, 11})) { // 8, 11,
+                                            turnLightRed(new int[]{1});
+
+                                            turn32Green();
+//                                            InWeekdayState = InWeekdayState.LIGHT32;
+                                            InWeekdayState = InWeekdayState.LIGHT32;
 
                                             break;
                                         } else if (!timer.isAlive()) {
@@ -252,6 +305,32 @@ public class Controller extends Thread {
                                         } else
                                             yield();
 
+                                    }*/
+                                    while (true) {
+                                        if (evButtonPressed.arrivedEvent()) {
+                                            int num = (int) evButtonPressed.waitEvent();
+                                            if (num == 16) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                            } else if (num == 8 || num == 11) {
+                                                turnLightRed(new int[]{1});
+                                                turn32Green();
+                                                InWeekdayState = InWeekdayState.LIGHT32;
+                                                break;
+                                            } else if (num == 9 || num == 10 || num == 14 || num == 15) {
+                                                turnLightRed(new int[]{1, 2});
+                                                turn0Green();
+                                                InWeekdayState = InWeekdayState.LIGHT0;
+                                            }
+                                            break;
+                                        } else if (!timer.isAlive()) {
+                                            turnLightRed(new int[]{1, 2});
+                                            turn0Green();
+                                            InWeekdayState = InWeekdayState.LIGHT0;
+                                            break;
+                                        } else
+                                            yield();
                                     }
                                     break;
                             }       // switch of in state at out state 'WEEKDAY'
@@ -259,7 +338,7 @@ public class Controller extends Thread {
                         break;
 
                     case SHABBAT:
-                        if (EventEnum.WEEKDAY == evButtonPressed.waitEvent()) {
+                        if (16 == (int) evButtonPressed.waitEvent()) {
                             out = false;
 //                        init();
                             outState = OutState.WEEKDAY;
@@ -277,8 +356,45 @@ public class Controller extends Thread {
         }
     }
 
+   /* private boolean buttonPressed(InWeekdayState inState) throws InterruptedException {
+        if (evButtonPressed.arrivedEvent()) {
+            HashSet<Integer> e4_5_8_11_14_15 = new HashSet<>();
+            e4_5_8_11_14_15.add(4);
+            e4_5_8_11_14_15.add(5);
+            e4_5_8_11_14_15.add(8);
+            e4_5_8_11_14_15.add(11);
+            e4_5_8_11_14_15.add(14);
+            e4_5_8_11_14_15.add(15);
 
-    
+            int buttonPressed = (int) evButtonPressed.waitEvent();
+            switch (outState) {
+                case WEEKDAY:
+                    switch (inState) {
+                        case LIGHT0:
+                            if (e4_5_8_11_14_15.contains(buttonPressed)) {
+                                InWeekdayState = InWeekdayState.LIGHT32;
+                                turnLightRed(new int[]{0});
+                                turn32Green();
+                            } else if (buttonPressed == 16) {
+                                shabbatOn();
+                                out = true;
+                                outState = OutState.SHABBAT;
+                                break;
+                            }
+                        case LIGHT32:
+                            break;
+
+                        case LIGHT12:
+                            break;
+
+                    }
+                    break;
+                case SHABBAT:
+            }
+        }
+        return false;
+    }*/
+
 
     private boolean crossWalkButtonPressed(int[] arrCrossWalk) {
         if (evButtonPressed.arrivedEvent()) {
@@ -355,12 +471,12 @@ public class Controller extends Thread {
 
     private void turn12Green() throws InterruptedException {
 
-        int[] arrCrossWalk = {4, 5, 8, 11, 9, 10};
+        int[] arrCrossWalk = {14, 15, 8, 11, 9, 10};
         turnLightRed(arrCrossWalk);
 
         sleep(500);
         evSend[1].sendEvent(EventEnum.GREEN);
-        evSend[2].sendEvent(EventEnum.GREEN);
+//        evSend[2].sendEvent(EventEnum.GREEN);
 
         evSend[4].sendEvent(EventEnum.GREEN);
         evSend[5].sendEvent(EventEnum.GREEN);
@@ -380,7 +496,8 @@ public class Controller extends Thread {
         //TODO check if right
 
     }
-//todo what if green?
+
+    //todo what if green?
     private boolean allRamzorimTurnedRed() {
         for (int i = 0; i < 16; i++) {
             evAck[i].waitEvent();
@@ -434,7 +551,7 @@ public class Controller extends Thread {
             new ShloshaAvot(ramzorim[i], tlf.myPanel, 1 + i, evSend[i], evAck[i]);
         }
         for (int i = 4; i < 16; i++) {
-            new ShneyLuchot(ramzorim[i], tlf.myPanel, evSend[i], evAck[i]);
+            new ShneyLuchot(ramzorim[i], tlf.myPanel, evSend[i], evAck[i]);//,butt[i]
         }
         new Echad(ramzorim[16], tlf.myPanel);
     }

@@ -16,15 +16,22 @@ import static java.lang.Thread.sleep;
 public class MyActionListener implements ActionListener {
     Event64 evButtonPressed;
 
-    MyActionListener(Event64 evButtonPressed){
-        this.evButtonPressed=evButtonPressed;
+    MyActionListener(Event64 evButtonPressed) {
+        this.evButtonPressed = evButtonPressed;
     }
 
 
     public void actionPerformed(ActionEvent e) {
-        Controller controller = Controller.getInstance();
+//        Controller controller = Controller.getInstance();
         JRadioButton butt = (JRadioButton) e.getSource();
-        boolean selected = false;
+
+        int numberPressed;
+        numberPressed = Integer.parseInt(butt.getName());
+        evButtonPressed.sendEvent(numberPressed);
+
+
+//        butt.setEnabled(true);
+      /*  boolean selected = false;
 //		System.out.println(butt.getName());
 
         if (Integer.parseInt(butt.getName()) < 16) {
@@ -37,7 +44,7 @@ public class MyActionListener implements ActionListener {
 //	        todo wait 1 second
             butt.setSelected(false);
         } else {
-            selected=!butt.isSelected();
+            selected = !butt.isSelected();
 //            if (butt.isSelected()) { //was selected -> unselect
 //                selected = false;
 //            } else  //wasnt selected ->select.
@@ -45,7 +52,7 @@ public class MyActionListener implements ActionListener {
             butt.setSelected(selected);
         }
 
-
+*/
 //        controller.eventFromListener(Integer.parseInt(butt.getName()), selected);
 
 //				butt.setEnabled(false);

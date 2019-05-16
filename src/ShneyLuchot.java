@@ -178,7 +178,7 @@ class ShneyLuchot extends Thread {
 
 import java.awt.Color;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * Created on Mimuna 5767upDate on Tevet 5770
@@ -201,17 +201,18 @@ class ShneyLuchot extends Thread {
     enum InState {RED, GREEN}
 
     ;
+    JRadioButton button;
     InState inState;
     private boolean history = false;
     EventEnum evRec;
 
 
-    public ShneyLuchot(Ramzor ramzor, JPanel panel, Event64 evRecieved, Event64 evAck) {
+    public ShneyLuchot(Ramzor ramzor, JPanel panel, Event64 evRecieved, Event64 evAck) {//, JRadioButton button
         this.ramzor = ramzor;
         this.panel = panel;
         this.evRecieved = evRecieved;
         this.evAck = evAck;
-
+//        this.button = button;
 //        this.evRedShney = evRedShney;
 //        this.evWeekdayShney = evWeekdayShney;
 //        this.evShabbatShney = evShabbatShney;
@@ -257,8 +258,8 @@ class ShneyLuchot extends Thread {
                                     while (true) {
                                         evRec = (EventEnum) evRecieved.waitEvent();
                                         if (evRec == EventEnum.RED) {
-                                            inState = InState.GREEN;
-                                            greenOn();
+                                            inState = InState.RED;
+                                            redOn();
                                             break;
                                         } else if (evRec == EventEnum.SHABBAT) {
                                             outState = OutState.SHABBAT;
@@ -277,7 +278,7 @@ class ShneyLuchot extends Thread {
                     case SHABBAT:
                         shabbatOn();
                         while (true) {
-                            if (evRecieved.waitEvent() == EventEnum.WEEKDAY) {
+                            if (evRecieved.waitEvent() == EventEnum.RED) {
                                 out = false;
                                 outState = OutState.WEEKDAY;
                                 if (!history)
@@ -313,11 +314,13 @@ class ShneyLuchot extends Thread {
     }
 
     public void greenOn() {
+//        button.setSelected(false);
         setLight(1, Color.GRAY);
         setLight(2, Color.GREEN);
     }
 
     public void redOn() {
+//        button.setSelected(true);
         setLight(1, Color.RED);
         setLight(2, Color.GRAY);
         evAck.sendEvent();
