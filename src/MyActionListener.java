@@ -14,6 +14,13 @@ import static java.lang.Thread.sleep;
 
 //TODO sends the controller 2 events. 1- if shabbos/ chol was pressed. 2- what 'shney luchot' was pressed. controller will deal with it himself.~
 public class MyActionListener implements ActionListener {
+    Event64 evButtonPressed;
+
+    MyActionListener(Event64 evButtonPressed){
+        this.evButtonPressed=evButtonPressed;
+    }
+
+
     public void actionPerformed(ActionEvent e) {
         Controller controller = Controller.getInstance();
         JRadioButton butt = (JRadioButton) e.getSource();
@@ -39,7 +46,7 @@ public class MyActionListener implements ActionListener {
         }
 
 
-        controller.eventFromListener(Integer.parseInt(butt.getName()), selected);
+//        controller.eventFromListener(Integer.parseInt(butt.getName()), selected);
 
 //				butt.setEnabled(false);
 //				butt.setSelected(false);

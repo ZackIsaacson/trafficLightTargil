@@ -1,20 +1,30 @@
+
+
+
 import javax.swing.*;
 import javax.swing.JRadioButton;
 import java.awt.*;
 
 public class Controller extends Thread {
 
+    private Event64[] evSend = new Event64[16];
 
-    private Event64[] evRedOn = new Event64[16];
+//    private Event64[] evRedOn = new Event64[16];
+//
+//    private Event64[] evGreenOn = new Event64[16];
+//    private Event64[] evShabbatOn = new Event64[16];
+//    private Event64[] evWeekdayOn = new Event64[16];
 
-    private Event64[] evGreenOn = new Event64[16];
-    private Event64[] evShabbatOn = new Event64[16];
-    private Event64[] evWeekdayOn = new Event64[16];
+    private Event64[] evAck = new Event64[16];
+//    private Event64[] evAck = new Event64[4];
+
 
     //TODO events dealing with listener
-    private Event64 evShabbatOnButton;// = new Event64();  //16 if not selected and pressed
-    private Event64 evShabbatOffButton;// = new Event64(); //16 if selected and pressed
-    private Event64[] evButton = new Event64[12];  //4-15
+    private Event64 evButtonPressed;// = new Event64();  //16 if not selected and pressed
+
+//    private Event64 evButtonPressed;// = new Event64();  //16 if not selected and pressed
+//    private Event64 evShabbatOffButton;// = new Event64(); //16 if selected and pressed
+//    private Event64[] evButtonPressed = new Event64[16];  //4-15  //
 
 
     Ramzor ramzorim[];
@@ -39,18 +49,7 @@ public class Controller extends Thread {
     private boolean stop = true;
     DanTimer75 timer;
 
-    /*    public ShloshaAvot(Ramzor ramzor, JPanel panel, int key, Event64 evYellowRedShlosha, Event64 evYellowShlosha,
-                           Event64 evTurnedRedOn,Event64 evWeekdayShlosha, Event64 evShabbatOnButton) {
-            this.ramzor = ramzor;
-            this.panel = panel;
-            new CarsMaker(panel, this, key);
-            this.evYellowRedShlosha = evYellowRedShlosha;
-            this.evYellowShlosha = evYellowShlosha;
-            this.evWeekdayShlosha = evWeekdayShlosha;
-            this.evShabbatOnButton = evShabbatOnButton;
-            this.evTurnedRedOn=evTurnedRedOn;
-            start();
-        }*/
+
     private static Controller ourInstance = new Controller();
 
     public static Controller getInstance() {
@@ -65,33 +64,50 @@ public class Controller extends Thread {
     }
 
     private void createEvents() {
-       /* private Event64[] evGreenOn = new Event64[16];
-        private Event64[] evShabbatOn = new Event64[16];
-        private Event64[] evWeekdayOn = new Event64[16];
 
-        //TODO events dealing with listener
-        private Event64 evShabbatOnButton = new Event64();  //16 if not selected and pressed
-        private Event64 evShabbatOffButton = new Event64(); //16 if selected and pressed
-        private Event64[] evButton = new Event64[12];  /*/
+        for (int i = 0; i < 16; i++) {
+
+            evSend[i] = new Event64();
+            evAck[i] = new Event64();
+
+
+            //4 to 15
+        }
+        evButtonPressed = new Event64();
+    /*    for (int i = 0; i < 4; i++) {
+
+            evAck[i] = new Event64();
+
+
+            //4 to 15
+        }
         for (int i = 0; i < 16; i++) {
             evRedOn[i] = new Event64();
             evGreenOn[i] = new Event64();
             evShabbatOn[i] = new Event64();
             evWeekdayOn[i] = new Event64();
+            evAck[i] = new Event64();
+
+
+            //4 to 15
         }
-        for (int i = 0; i < 12; i++) {
-            evButton[i] = new Event64();
+        for (int i = 0; i < 16; i++) {
+            if (i < 4)
+                evButtonPressed[i] = null;
+            else
+                evButtonPressed[i] = new Event64();
         }
-        evShabbatOnButton = new Event64();  //16 if not selected and pressed
-        evShabbatOffButton = new Event64(); //16 if selected and pressed
+        evButtonPressed = new Event64();  //16 if not selected and pressed
+        evShabbatOffButton = new Event64(); //16 if selected and pressed*/
     }
 
     boolean fromReset;
 
     public void run() {
+
+
         try {
 
-            /* try {*/
             boolean finish = false;
             boolean out = false;
             outState = OutState.WEEKDAY;
@@ -113,275 +129,281 @@ public class Controller extends Thread {
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
-                                        } else if (evShabbatOnButton.arrivedEvent()) {
-                                            evShabbatOnButton.waitEvent();
-                                            shabbatOn();
-                                            out = true;
-                                            outState = OutState.SHABBAT;
-                                            break;
-                                        }
+                                        } else if (evButtonPressed.arrivedEvent()) {
+
+                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                                break;
+                                            }
+                                        } else
+                                            yield();
+
                                     }
                                     break;
                                 case LIGHT0:
+//                                    if((evAck[0].waitEvent()==EventAckEnum.GREEN));
+                                    evAck[0].waitEvent(); //todo check that only evAck from green can 
+                                    timer = new DanTimer75(3000);
                                     while (true) {
-                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
+//TODO MAKE TIMER
+
                                         if (crossWalkButtonPressed(new int[]{4, 5, 8, 11, 14, 15})) {
+                                            turnLightRed(new int[]{0});
                                             turn32Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT32;
 
                                             break;
-                                        } else if (!timer.isAlive()) {  /*TODO CHECK IF TIMER OVER*/
+                                        } else if (!timer.isAlive()) {
+//TODO CHECK IF TIMER OVER
+
+                                            turnLightRed(new int[]{0});
                                             turn32Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT32;
 
                                             break;
-                                        } else if (evShabbatOnButton.arrivedEvent()) {
-                                            evShabbatOnButton.waitEvent();
-                                            shabbatOn();
-                                            out = true;
-                                            outState = OutState.SHABBAT;
-                                            break;
-                                        }
+                                        } else if (evButtonPressed.arrivedEvent()) {
+                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                                break;
+                                            }
+                                        } else
+                                            yield();
+
                                     }
                                     break;
-                            /*    case LIGHT32:
-                                    while (true) {
-                                        if (evYellowRedShlosha.arrivedEvent()) {
-                                            evYellowRedShlosha.waitEvent();
-                                            yellowRedOn();
-                                            InWeekdayState = InWeekdayState.LIGHT12;
-                                            break;
-                                        } else if (evShabbatOnButton.arrivedEvent()) {
-                                            evShabbatOnButton.waitEvent();
-                                            shabbatOn();
-                                            out = true;
-                                            outState = OutState.SHABBAT;
-                                            break;
-                                        }
-                                    }
-                                    break;*/
+
+
                                 case LIGHT32:
+                                    evAck[2].waitEvent();  //todo can it possibly be event from red??
+                                    evAck[3].waitEvent();  //todo supposed to be evAckGreen
+                                    timer = new DanTimer75(3000);
+//TODO MAKE TIMER
+
                                     while (true) {
-                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
                                         if (crossWalkButtonPressed(new int[]{9, 10})) {
+                                            turnLightRed(new int[]{2, 3});
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
                                         } else if (crossWalkButtonPressed(new int[]{6, 7, 12, 13})) {
+                                            turnLightRed(new int[]{2, 3});
                                             turn12Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT12;
 
                                             break;
                                         } else if (!timer.isAlive()) {
+                                            turnLightRed(new int[]{2, 3});
                                             turn12Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT12;
 
                                             break;
-                                        } else if (evShabbatOnButton.arrivedEvent()) {
-                                            evShabbatOnButton.waitEvent();
-                                            shabbatOn();
-                                            out = true;
-                                            outState = OutState.SHABBAT;
-                                            break;
-                                        }
+                                        } else if (evButtonPressed.arrivedEvent()) {
+                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                                break;
+                                            }
+                                        } else
+                                            yield();
+
                                     }
                                     break;
                                 case LIGHT12:
-                                    while (true) {
-                                        timer = new DanTimer75(5000);                                        /*TODO MAKE TIMER*/
+                                    evAck[1].waitEvent();
+                                    evAck[2].waitEvent();
+                                    timer = new DanTimer75(3000);
+//TODO MAKE TIMER
 
-                                        /*TODO MAKE TIMER*/
+                                    while (true) {
+//TODO MAKE TIMER
                                         if (crossWalkButtonPressed(new int[]{9, 10, 8, 11, 14, 15})) {
+                                            turnLightRed(new int[]{1, 2});
+
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
                                         } else if (!timer.isAlive()) {
+                                            turnLightRed(new int[]{1, 2});
                                             turn0Green();
 //                                            InWeekdayState = InWeekdayState.LIGHT32;
                                             InWeekdayState = InWeekdayState.LIGHT0;
 
                                             break;
-                                        } else if (evShabbatOnButton.arrivedEvent()) {
-                                            evShabbatOnButton.waitEvent();
-                                            shabbatOn();
-                                            out = true;
-                                            outState = OutState.SHABBAT;
-                                            break;
-                                        }
+                                        } else if (evButtonPressed.arrivedEvent()) {
+                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
+                                                shabbatOn();
+                                                out = true;
+                                                outState = OutState.SHABBAT;
+                                                break;
+                                            }
+                                        } else
+                                            yield();
+
                                     }
                                     break;
-								/*	case CAN_EXITING:
-										while (true)
-										{
-											if (evWeekdayShlosha.arrivedEvent())
-											{
-												evWeekdayShlosha.waitEvent();
-												numOfC--;
-												if (numOfC>0)
-												{
-													show(sum);
-													init();
-													InWeekdayState=InWeekdayState.LIGHT0;
-												}
-												else
-												{
-													out=true;
-													call("have no small can");
-													outState=OutState.SHABBAT;
-												}
-												break;
-											}
-											else if (evShabbatOnButton.arrivedEvent())
-											{
-												evShabbatOnButton.waitEvent();
-												call("Problem");
-												out=true;
-												outState=OutState.SHABBAT;
-												break;
-											}
-										}
-										break;*/
                             }       // switch of in state at out state 'WEEKDAY'
                         }           // loop at out state 'WEEKDAY'
                         break;
 
                     case SHABBAT:
-                        evShabbatOffButton.waitEvent();
-                        out = false;
+                        if (EventEnum.WEEKDAY == evButtonPressed.waitEvent()) {
+                            out = false;
 //                        init();
-                        outState = OutState.WEEKDAY;
-                        if (!history)
-                            sendRedEventToAllRamzorim();
-                        InWeekdayState = InWeekdayState.RESET;
-                        break;
+                            outState = OutState.WEEKDAY;
+                            if (!history)
+                                sendRedEventToAllRamzorim();
+                            InWeekdayState = InWeekdayState.RESET;
+                            break;
+                        }
 
                 }
             }
-			/*	sleep(1000);
-				setLight(1,Color.GRAY);
-				setLight(2,Color.LIGHT12);
-				sleep(1000);
-				setLight(1,Color.LIGHT0);
-				setLight(2,Color.GRAY);*/
-
-        /*} catch (InterruptedException e) {
-        }*/
 
 
-			/*while (true)
-			{
-				sleep(1000);
-				setLight(2,Color.LIGHT32);
-				sleep(1000);
-				setLight(1,Color.LIGHT_GRAY);
-				setLight(2,Color.LIGHT_GRAY);
-				setLight(3,Color.LIGHT12);
-				stop=false;    //makes cars
-				sleep(3000);
-				stop=true;     //stops making cars
-				setLight(1,Color.LIGHT_GRAY);
-				setLight(2,Color.LIGHT32);
-				setLight(3,Color.LIGHT_GRAY);
-				sleep(1000);
-				setLight(1,Color.LIGHT0);
-				setLight(2,Color.LIGHT_GRAY);
-				setLight(3,Color.LIGHT_GRAY);
-			}*/
         } catch (InterruptedException e) {
         }
-
     }
 
+
+    
+
     private boolean crossWalkButtonPressed(int[] arrCrossWalk) {
-        for (int i = 0; i < arrCrossWalk.length; i++) {
-            if (evButton[arrCrossWalk[i]].arrivedEvent()) {
-                evButton[arrCrossWalk[i]].waitEvent();
-                return true;
+        if (evButtonPressed.arrivedEvent()) {
+            int buttonPressed = (int) evButtonPressed.waitEvent();
+            for (int i = 0; i < arrCrossWalk.length; i++) {
+                if (buttonPressed == arrCrossWalk[i])
+                    return true;
             }
         }
         return false;
     }
+    /*    for(
+    int i = 0;
+    i<arrCrossWalk.length;i++)
 
-
-    private void turnCrossWalksRed(int[] arrCrossWalk) {
-        for (int i = 0; i < arrCrossWalk.length; i++) {
-            evRedOn[arrCrossWalk[i]].sendEvent();
-        }
-        //waiting for acks
-        for (int i = 0; i < arrCrossWalk.length; i++) {
-            evRedOn[arrCrossWalk[i]].waitEvent();
+    {
+        if (evButtonPressed[arrCrossWalk[i]].arrivedEvent()) {
+            evButtonPressed[arrCrossWalk[i]].waitEvent();
+            return true;
         }
     }
+        return false;
+}*/
+
+    private void turnLightRed(int[] arrLight) {
+        for (int i = 0; i < arrLight.length; i++) {
+            evSend[arrLight[i]].sendEvent(EventEnum.RED);
+        }
+        //waiting for acks
+        for (int i = 0; i < arrLight.length; i++) {
+            evAck[arrLight[i]].waitEvent();  //todo evAck red only. can evAckGreen get here?
+        }
+
+    }
+
 
     private void turn0Green() throws InterruptedException {
         if (!fromReset) {
             int[] arrCrossWalk = {4, 5, 8, 11, 14, 15};
-            turnCrossWalksRed(arrCrossWalk);
+            turnLightRed(arrCrossWalk);
         }
         sleep(500);
 
-        evGreenOn[0].sendEvent();
+        //car light
+        evSend[0].sendEvent(EventEnum.GREEN);
+
+        //pedestrian light
+        evSend[6].sendEvent(EventEnum.GREEN);
+        evSend[7].sendEvent(EventEnum.GREEN);
+        evSend[9].sendEvent(EventEnum.GREEN);
+        evSend[10].sendEvent(EventEnum.GREEN);
+        evSend[12].sendEvent(EventEnum.GREEN);
+        evSend[13].sendEvent(EventEnum.GREEN);
+
+//        evGreenOn[0].sendEvent();
     }
 
     private void turn32Green() throws InterruptedException {
         int[] arrCrossWalk = {6, 7, 9, 10, 12, 13};
-        turnCrossWalksRed(arrCrossWalk);
+        turnLightRed(arrCrossWalk);
         sleep(500);
-        evGreenOn[3].sendEvent();
-        evGreenOn[2].sendEvent();
+        evSend[3].sendEvent(EventEnum.GREEN);
+        evSend[2].sendEvent(EventEnum.GREEN);
+
+        evSend[4].sendEvent(EventEnum.GREEN);
+        evSend[5].sendEvent(EventEnum.GREEN);
+        evSend[8].sendEvent(EventEnum.GREEN);
+        evSend[11].sendEvent(EventEnum.GREEN);
+        evSend[14].sendEvent(EventEnum.GREEN);
+        evSend[15].sendEvent(EventEnum.GREEN);
+//        evGreenOn[3].sendEvent();
+//        evGreenOn[2].sendEvent();
     }
 
     private void turn12Green() throws InterruptedException {
 
         int[] arrCrossWalk = {4, 5, 8, 11, 9, 10};
-        turnCrossWalksRed(arrCrossWalk);
+        turnLightRed(arrCrossWalk);
 
         sleep(500);
+        evSend[1].sendEvent(EventEnum.GREEN);
+        evSend[2].sendEvent(EventEnum.GREEN);
 
-        evGreenOn[1].sendEvent();
-        evGreenOn[2].sendEvent();
+        evSend[4].sendEvent(EventEnum.GREEN);
+        evSend[5].sendEvent(EventEnum.GREEN);
+        evSend[6].sendEvent(EventEnum.GREEN);
+        evSend[7].sendEvent(EventEnum.GREEN);
+        evSend[12].sendEvent(EventEnum.GREEN);
+        evSend[13].sendEvent(EventEnum.GREEN);
+//        evGreenOn[1].sendEvent();
+//        evGreenOn[2].sendEvent();
     }
 
 
     public void sendRedEventToAllRamzorim() {
         for (int i = 0; i < 16; i++) {
-            evRedOn[i].sendEvent();
+            evSend[i].sendEvent(EventEnum.RED);
         }
         //TODO check if right
 
     }
-
+//todo what if green?
     private boolean allRamzorimTurnedRed() {
         for (int i = 0; i < 16; i++) {
-            evRedOn[i].waitEvent();
+            evAck[i].waitEvent();
         }
         return true;
     }
 
-    public void eventFromListener(int i, boolean selected) {
+   /* public void eventFromListener(int i, boolean selected) {
         if (i < 16)
-            evButton[i].sendEvent();
+            evButtonPressed[i].sendEvent();
         else if (i == 16 && selected)
-            evShabbatOnButton.sendEvent();
+            evButtonPressed.sendEvent();
         else
             evShabbatOffButton.sendEvent();
 
         //TODO check if right
 
-    }
+    }*/
 
     public void shabbatOn() throws InterruptedException {
 
         for (int i = 0; i < 16; i++) {
-            evShabbatOn[i].sendEvent();
+            evSend[i].sendEvent(EventEnum.SHABBAT);
         }
     }
 
@@ -409,16 +431,16 @@ public class Controller extends Thread {
         ramzorim[16] = new Ramzor(1, 30, 555, 645);
         tlf = new TrafficLightFrame(" úùò''á installation of traffic lights", ramzorim);
         for (int i = 0; i < 4; i++) {
-            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1 + i, evRedOn[i], evGreenOn[i], evShabbatOn[i], evWeekdayOn[i]);
+            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1 + i, evSend[i], evAck[i]);
         }
         for (int i = 4; i < 16; i++) {
-            new ShneyLuchot(ramzorim[i], tlf.myPanel, evRedOn[i], evGreenOn[i], evShabbatOn[i], evWeekdayOn[i]);
+            new ShneyLuchot(ramzorim[i], tlf.myPanel, evSend[i], evAck[i]);
         }
         new Echad(ramzorim[16], tlf.myPanel);
     }
 
     private void createButtons() {
-        myListener = new MyActionListener();
+        myListener = new MyActionListener(evButtonPressed);
 
         butt = new JRadioButton[13];
 

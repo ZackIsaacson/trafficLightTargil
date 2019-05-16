@@ -13,8 +13,7 @@ class Event64
         resetEvent();
     }
 
-    public void resetEvent()
-    {
+    public void resetEvent() {
         isWaitingForMe = false;
         localData = null;
         inUse = false;
@@ -25,8 +24,7 @@ class Event64
         return inUse;
     }
 
-    public synchronized Object waitEvent()
-    {
+    public synchronized Object waitEvent() {
         if (isWaitingForMe)
             notify();
 
@@ -55,8 +53,7 @@ class Event64
         while (!trySendEvent(aData)) Thread.yield();
     }
 
-    public synchronized boolean trySendEvent(Object aData)
-    {
+    public synchronized boolean trySendEvent(Object aData) {
         if (inUse)
             return false;
 
@@ -79,8 +76,7 @@ class Event64
         while (!trySendSyncEvent(aData)) Thread.yield();
     }
 
-    public synchronized boolean trySendSyncEvent(Object aData)
-    {
+    public synchronized boolean trySendSyncEvent(Object aData) {
         if (inUse)
             return false;
 
