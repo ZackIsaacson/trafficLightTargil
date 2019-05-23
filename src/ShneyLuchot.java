@@ -220,6 +220,19 @@ class ShneyLuchot extends Thread {
         setDaemon(true);
         start();
     }
+    public ShneyLuchot(Ramzor ramzor, JPanel panel, Event64 evRecieved, Event64 evAck, JRadioButton button) {//
+        this.ramzor = ramzor;
+        this.panel = panel;
+        this.evRecieved = evRecieved;
+        this.evAck = evAck;
+        this.button = button;
+//        this.evRedShney = evRedShney;
+//        this.evWeekdayShney = evWeekdayShney;
+//        this.evShabbatShney = evShabbatShney;
+
+        setDaemon(true);
+        start();
+    }
 
     public void run() {
         try {
@@ -288,14 +301,7 @@ class ShneyLuchot extends Thread {
                             }
                         }
                         break;
-                 /*       evWeekdayShney.waitEvent();
-                        out = false;
-//                        init();
-                        outState = OutState.WEEKDAY;
-                        if (!history)
-                            redOn();
-                        inState = InState.RED;
-                        break;*/
+
 
                 }
             }
@@ -314,20 +320,24 @@ class ShneyLuchot extends Thread {
     }
 
     public void greenOn() {
-//        button.setSelected(false);
+        button.setEnabled(false);
+        button.setSelected(false);
         setLight(1, Color.GRAY);
         setLight(2, Color.GREEN);
+
     }
 
     public void redOn() {
-//        button.setSelected(true);
+        button.setEnabled(true);
         setLight(1, Color.RED);
         setLight(2, Color.GRAY);
+
         evAck.sendEvent();
 //        TODO make sure send event is right. that really goes back to controller. (if not create another event with controller holding other side and send back to controller that turned red)
     }
 
     public void shabbatOn() {
+        button.setEnabled(false);
         setLight(1, Color.GRAY);
         setLight(2, Color.GRAY);
     }

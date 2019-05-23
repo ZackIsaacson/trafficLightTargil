@@ -24,9 +24,11 @@ public class MyActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 //        Controller controller = Controller.getInstance();
         JRadioButton butt = (JRadioButton) e.getSource();
-
         int numberPressed;
         numberPressed = Integer.parseInt(butt.getName());
+        if (numberPressed < 16)
+            butt.setEnabled(false);
+
         evButtonPressed.sendEvent(numberPressed);
 
 

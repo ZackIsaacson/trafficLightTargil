@@ -141,6 +141,9 @@ public class ShloshaAvot extends Thread {
 //                                            shabbatOn();
                                             out = true;
                                             break;
+                                        }else{
+                                            //if green and got event green
+                                            greenOn();  //send event back
                                         }
                                       /*  if (evRedShlosha.arrivedEvent()) {
                                             evRedShlosha.waitEvent();

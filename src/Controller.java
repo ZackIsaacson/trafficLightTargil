@@ -1,10 +1,8 @@
 
 
 
-import javax.swing.*;
 import javax.swing.JRadioButton;
-import java.awt.*;
-import java.util.HashSet;
+
 
 public class Controller extends Thread {
 
@@ -59,10 +57,14 @@ public class Controller extends Thread {
 
     private Controller() {
         createEvents(); //todo need?
-        createRamzorim();
-        createButtons();
+        createRamzorimAndButtons();
+//        createRamzAndButtons();
+//        createRamzorim();
+//        createButtons();
         start();
     }
+
+
 
     private void createEvents() {
 
@@ -175,28 +177,6 @@ public class Controller extends Thread {
                                     }
                                     break;
 
-                                     /*   if (crossWalkButtonPressed(new int[]{4, 5, 8, 11, 14, 15})) {
-                                            turnLightRed(new int[]{0});
-                                            turn32Green();
-                                            InWeekdayState = InWeekdayState.LIGHT32;
-
-                                            break;
-                                        } else if (evButtonPressed.arrivedEvent()) {
-                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
-                                                shabbatOn();
-                                                out = true;
-                                                outState = OutState.SHABBAT;
-                                                break;
-                                            }*/
-                                       /* } else if (!timer.isAlive()) {
-//TODO CHECK IF TIMER OVER
-
-                                            turnLightRed(new int[]{0});
-                                            turn32Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT32;
-
-                                            break;*/
 
 
                                 case LIGHT32:
@@ -205,38 +185,7 @@ public class Controller extends Thread {
                                     timer = new DanTimer75(5000);
 //TODO MAKE TIMER
 
-                                   /* while (true) {
-                                        if (crossWalkButtonPressed(new int[]{9, 10})) {
-                                            turnLightRed(new int[]{2, 3});
-                                            turn0Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT0;
 
-                                            break;
-                                        } else if (crossWalkButtonPressed(new int[]{6, 7, 12, 13})) {
-                                            turnLightRed(new int[]{3});
-                                            turn12Green();
-                                            InWeekdayState = InWeekdayState.LIGHT12;
-
-                                            break;
-                                        } else if (!timer.isAlive()) {
-                                            turnLightRed(new int[]{3});
-                                            turn12Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT12;
-
-                                            break;
-                                        } else if (evButtonPressed.arrivedEvent()) {
-                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
-                                                shabbatOn();
-                                                out = true;
-                                                outState = OutState.SHABBAT;
-                                                break;
-                                            }
-                                        } else
-                                            yield();
-
-                                    }*/
                                     while (true) {
                                         if (evButtonPressed.arrivedEvent()) {
                                             int num = (int) evButtonPressed.waitEvent();
@@ -268,44 +217,6 @@ public class Controller extends Thread {
                                     evAck[1].waitEvent();
 //                                    evAck[2].waitEvent();
                                     timer = new DanTimer75(5000);
-//TODO MAKE TIMER
-/*
-                                    while (true) {
-//TODO MAKE TIMER
-                                        if (crossWalkButtonPressed(new int[]{9, 10, 14, 15})) { // 8, 11,
-                                            turnLightRed(new int[]{1, 2});
-
-                                            turn0Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT0;
-
-                                            break;
-                                        } else if (crossWalkButtonPressed(new int[]{8, 11})) { // 8, 11,
-                                            turnLightRed(new int[]{1});
-
-                                            turn32Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT32;
-
-                                            break;
-                                        } else if (!timer.isAlive()) {
-                                            turnLightRed(new int[]{1, 2});
-                                            turn0Green();
-//                                            InWeekdayState = InWeekdayState.LIGHT32;
-                                            InWeekdayState = InWeekdayState.LIGHT0;
-
-                                            break;
-                                        } else if (evButtonPressed.arrivedEvent()) {
-                                            if (EventEnum.SHABBAT == evButtonPressed.waitEvent()) {
-                                                shabbatOn();
-                                                out = true;
-                                                outState = OutState.SHABBAT;
-                                                break;
-                                            }
-                                        } else
-                                            yield();
-
-                                    }*/
                                     while (true) {
                                         if (evButtonPressed.arrivedEvent()) {
                                             int num = (int) evButtonPressed.waitEvent();
@@ -313,12 +224,12 @@ public class Controller extends Thread {
                                                 shabbatOn();
                                                 out = true;
                                                 outState = OutState.SHABBAT;
-                                            } else if (num == 8 || num == 11) {
+                                            } else if (num == 8 || num == 11 || num == 14 || num == 15) {
                                                 turnLightRed(new int[]{1});
                                                 turn32Green();
                                                 InWeekdayState = InWeekdayState.LIGHT32;
                                                 break;
-                                            } else if (num == 9 || num == 10 || num == 14 || num == 15) {
+                                            } else if (num == 9 || num == 10 ) {
                                                 turnLightRed(new int[]{1, 2});
                                                 turn0Green();
                                                 InWeekdayState = InWeekdayState.LIGHT0;
@@ -356,44 +267,6 @@ public class Controller extends Thread {
         }
     }
 
-   /* private boolean buttonPressed(InWeekdayState inState) throws InterruptedException {
-        if (evButtonPressed.arrivedEvent()) {
-            HashSet<Integer> e4_5_8_11_14_15 = new HashSet<>();
-            e4_5_8_11_14_15.add(4);
-            e4_5_8_11_14_15.add(5);
-            e4_5_8_11_14_15.add(8);
-            e4_5_8_11_14_15.add(11);
-            e4_5_8_11_14_15.add(14);
-            e4_5_8_11_14_15.add(15);
-
-            int buttonPressed = (int) evButtonPressed.waitEvent();
-            switch (outState) {
-                case WEEKDAY:
-                    switch (inState) {
-                        case LIGHT0:
-                            if (e4_5_8_11_14_15.contains(buttonPressed)) {
-                                InWeekdayState = InWeekdayState.LIGHT32;
-                                turnLightRed(new int[]{0});
-                                turn32Green();
-                            } else if (buttonPressed == 16) {
-                                shabbatOn();
-                                out = true;
-                                outState = OutState.SHABBAT;
-                                break;
-                            }
-                        case LIGHT32:
-                            break;
-
-                        case LIGHT12:
-                            break;
-
-                    }
-                    break;
-                case SHABBAT:
-            }
-        }
-        return false;
-    }*/
 
 
     private boolean crossWalkButtonPressed(int[] arrCrossWalk) {
@@ -524,6 +397,136 @@ public class Controller extends Thread {
         }
     }
 
+    /*private void createRamzAndButtons() {
+        final int numOfLights = 4 + 12 + 1;
+        ramzorim = new Ramzor[numOfLights];
+        ramzorim[0] = new Ramzor(3, 40, 430, 110, 472, 110, 514, 110);
+        ramzorim[1] = new Ramzor(3, 40, 450, 310, 450, 352, 450, 394);
+        ramzorim[2] = new Ramzor(3, 40, 310, 630, 280, 605, 250, 580);
+        ramzorim[3] = new Ramzor(3, 40, 350, 350, 308, 350, 266, 350);
+
+        ramzorim[4] = new Ramzor(2, 20, 600, 18, 600, 40);
+        ramzorim[5] = new Ramzor(2, 20, 600, 227, 600, 205);
+        ramzorim[6] = new Ramzor(2, 20, 600, 255, 600, 277);
+        ramzorim[7] = new Ramzor(2, 20, 600, 455, 600, 433);
+        ramzorim[8] = new Ramzor(2, 20, 575, 475, 553, 475);
+        ramzorim[9] = new Ramzor(2, 20, 140, 608, 150, 590);
+        ramzorim[10] = new Ramzor(2, 20, 205, 475, 193, 490);
+        ramzorim[11] = new Ramzor(2, 20, 230, 475, 250, 475);
+        ramzorim[12] = new Ramzor(2, 20, 200, 453, 200, 433);
+        ramzorim[13] = new Ramzor(2, 20, 200, 255, 200, 277);
+        ramzorim[14] = new Ramzor(2, 20, 200, 227, 200, 205);
+        ramzorim[15] = new Ramzor(2, 20, 200, 18, 200, 40);
+
+        ramzorim[16] = new Ramzor(1, 30, 555, 645);
+        tlf = new TrafficLightFrame(" úùò''á installation of traffic lights", ramzorim);
+
+        butt = new JRadioButton[13];
+
+        for (int i = 0; i < butt.length - 1; i++) {
+            butt[i] = new JRadioButton();
+            butt[i].setName(Integer.toString(i + 4));
+            butt[i].setOpaque(false);
+            butt[i].addActionListener(myListener);
+            tlf.myPanel.add(butt[i]);
+        }
+        butt[0].setBounds(620, 30, 18, 18);
+        butt[1].setBounds(620, 218, 18, 18);
+        butt[2].setBounds(620, 267, 18, 18);
+        butt[3].setBounds(620, 447, 18, 18);
+        butt[4].setBounds(566, 495, 18, 18);
+        butt[5].setBounds(162, 608, 18, 18);
+        butt[6].setBounds(213, 495, 18, 18);
+        butt[7].setBounds(240, 457, 18, 18);
+        butt[8].setBounds(220, 443, 18, 18);
+        butt[9].setBounds(220, 267, 18, 18);
+        butt[10].setBounds(220, 218, 18, 18);
+        butt[11].setBounds(220, 30, 18, 18);
+
+        butt[12] = new JRadioButton();   //shabbbos button
+        butt[12].setName(Integer.toString(16));
+        butt[12].setBounds(50, 30, 55, 20);
+        butt[12].setText("Shabbos");
+        butt[12].setOpaque(false);
+        butt[12].addActionListener(myListener);
+        tlf.myPanel.add(butt[12]);
+        for (int i = 0; i < 4; i++) {
+            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1 + i, evSend[i], evAck[i]);
+        }
+        for (int i = 4; i < 16; i++) {
+            new ShneyLuchot(ramzorim[i], tlf.myPanel, evSend[i], evAck[i],butt[i]);//,butt[i]
+        }
+        new Echad(ramzorim[16], tlf.myPanel);
+
+
+        myListener = new MyActionListener(evButtonPressed);
+
+
+    }*/
+    private void createRamzorimAndButtons() {
+        final int numOfLights = 4 + 12 + 1;
+        ramzorim = new Ramzor[numOfLights];
+        ramzorim[0] = new Ramzor(3, 40, 430, 110, 472, 110, 514, 110);
+        ramzorim[1] = new Ramzor(3, 40, 450, 310, 450, 352, 450, 394);
+        ramzorim[2] = new Ramzor(3, 40, 310, 630, 280, 605, 250, 580);
+        ramzorim[3] = new Ramzor(3, 40, 350, 350, 308, 350, 266, 350);
+
+        ramzorim[4] = new Ramzor(2, 20, 600, 18, 600, 40);
+        ramzorim[5] = new Ramzor(2, 20, 600, 227, 600, 205);
+        ramzorim[6] = new Ramzor(2, 20, 600, 255, 600, 277);
+        ramzorim[7] = new Ramzor(2, 20, 600, 455, 600, 433);
+        ramzorim[8] = new Ramzor(2, 20, 575, 475, 553, 475);
+        ramzorim[9] = new Ramzor(2, 20, 140, 608, 150, 590);
+        ramzorim[10] = new Ramzor(2, 20, 205, 475, 193, 490);
+        ramzorim[11] = new Ramzor(2, 20, 230, 475, 250, 475);
+        ramzorim[12] = new Ramzor(2, 20, 200, 453, 200, 433);
+        ramzorim[13] = new Ramzor(2, 20, 200, 255, 200, 277);
+        ramzorim[14] = new Ramzor(2, 20, 200, 227, 200, 205);
+        ramzorim[15] = new Ramzor(2, 20, 200, 18, 200, 40);
+
+        ramzorim[16] = new Ramzor(1, 30, 555, 645);
+        tlf = new TrafficLightFrame(" úùò''á installation of traffic lights", ramzorim);
+
+        myListener = new MyActionListener(evButtonPressed);
+
+        butt = new JRadioButton[13];
+
+        for (int i = 0; i < butt.length - 1; i++) {
+            butt[i] = new JRadioButton();
+            butt[i].setName(Integer.toString(i + 4));
+            butt[i].setOpaque(false);
+            butt[i].addActionListener(myListener);
+            tlf.myPanel.add(butt[i]);
+        }
+        butt[0].setBounds(620, 30, 18, 18);
+        butt[1].setBounds(620, 218, 18, 18);
+        butt[2].setBounds(620, 267, 18, 18);
+        butt[3].setBounds(620, 447, 18, 18);
+        butt[4].setBounds(566, 495, 18, 18);
+        butt[5].setBounds(162, 608, 18, 18);
+        butt[6].setBounds(213, 495, 18, 18);
+        butt[7].setBounds(240, 457, 18, 18);
+        butt[8].setBounds(220, 443, 18, 18);
+        butt[9].setBounds(220, 267, 18, 18);
+        butt[10].setBounds(220, 218, 18, 18);
+        butt[11].setBounds(220, 30, 18, 18);
+
+        butt[12] = new JRadioButton();   //shabbbos button
+        butt[12].setName(Integer.toString(16));
+        butt[12].setBounds(50, 30, 55, 20);
+        butt[12].setText("Shabbos");
+        butt[12].setOpaque(false);
+        butt[12].addActionListener(myListener);
+        tlf.myPanel.add(butt[12]);
+
+        for (int i = 0; i < 4; i++) {
+            new ShloshaAvot(ramzorim[i], tlf.myPanel, 1 + i, evSend[i], evAck[i]);
+        }
+        for (int i = 4; i < 16; i++) {
+            new ShneyLuchot(ramzorim[i], tlf.myPanel, evSend[i], evAck[i],butt[i-4]);//,butt[i]
+        }
+        new Echad(ramzorim[16], tlf.myPanel);
+    }
     private void createRamzorim() {
         final int numOfLights = 4 + 12 + 1;
         ramzorim = new Ramzor[numOfLights];
